@@ -1,0 +1,10 @@
+drop table FRIEND_REQUEST;
+drop table POST_COMMENT;
+drop table POST;
+drop table FRIENDSHIP;
+drop table MEMBER;
+drop table EVENT;
+drop table ADDRESS;
+drop table ZIPCODE_REF;
+drop index ADDRESS_INDEX;
+DELETE FROM USER_SDO_GEOM_METADATA WHERE TABLE_NAME = 'ADDRESS' AND COLUMN_NAME = 'COORDINATES';

@@ -1,0 +1,30 @@
+Aircraft	10829
+Art antique collecting	10811
+Astrology	7351
+Baseball	10841
+Basketball	10750
+Bicycling	10686
+Boating sailing	10753
+Book reading	10823
+Camping hiking	10786
+Casino vacation	10861
+Clothing	7291
+Cooking	10871
+Cosmetics	10951
+Cruise vacation	10638
+Electronics	10766
+Fashion	10758
+Fishing	10687
+Fitness	10797
+Football	10794
+Golf	10824
+History	11070
+Hockey	10958
+Home furnishings	10901
+Household pets	10884
+Hunting	10783
+Jewelry	10781
+Scuba	10778
+Shoes	10857
+Swimming pool	10848
+Tennis	10855

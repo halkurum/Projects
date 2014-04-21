@@ -1,0 +1,39 @@
+Name: Pranav Halkur Umashankar
+Email: halkurum@usc.edu
+
+
+Files needed to run Warmup2:
+
+	1. cs402.h
+	2. my402list.h
+	3. my402list.c
+	4. structDefinitions.h
+	5. generalHelper.h
+	6. generalHelper.c
+	7. displayManager.h
+	8. displayManager.c
+	9. clparser.h
+	10. clparser.c
+	11. threadManager.h
+	12. threadManager.c
+	13. warmup2main.h
+	14. warmup2main.c
+	15. Makefile
+
+Procedure for Make:
+
+	1. Have all the files need to run Warmup2 mentioned above in a folder.
+	2. Type make
+	3. Executable "warmup2" gets created.
+
+Assumptions and Trace File Behavior:
+ 
+	1. First, Number of packets (n) is read - First Line in the trace file.
+	2. Simulation is started and tracefile is read one line at a time for each packet Arrival.
+	3. If the trace file does not contain details of n packets (i.e if packet details are less than n specified in first line), program exits.
+	4. If the number of packet details is more than n (given in first line), the program reads only n packet details, simulates the token bucket filter and exits the program after printing the statistics. The rest of the packets are not considered and there is no abrupt exit of program.
+
+Sleep Behavior on NUNKI:
+
+	If the arrival Rate (r or lambda) or Packet Service Time (mu) is > 100 in NUNKI it has been observed that the thread always sleeps for 10ms. (i.e if mu = 1000, 1/mu = 0.001 i.e 1ms. The thread should actually sleep for 1ms. But it always sleeps for 10ms in NUNKI).
+	It is assumed that this is expected behavior since NUNKI (in solaris) does not allow a thread to sleep for less than 10ms.

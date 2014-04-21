@@ -1,0 +1,413 @@
+<html>
+<HEAD> <TITLE> Weather Search </TITLE> 
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<!-- <script type = "text/javascript" src = "jquery-1.10.2.min.js"> </script>-->
+<style>
+#cityName
+{
+    color: white;
+    font-family:Lucida Sans Unicode;
+    font-size:50px;
+    left:100px;
+	top:70px;
+	position:absolute;
+}
+#stateCountry
+{
+    color: white;
+    font-family: Lucida Sans Unicode;
+    font-size: 20px;
+    left: 100px;
+    position: relative;
+    top: 130px;
+}
+#inputText
+{
+	color: white;
+	font-family: Lucida Sans Unicode;
+	font-size:15px;
+	left:100px;
+	position:absolute;
+}
+a.rsslink
+{
+	text-decoration:none;
+	color:white;
+}
+#imgLink
+{
+	margin-left:100px;
+	margin-top:190px;
+	position:absolute;
+}
+#weatherCond
+{
+	color:white;
+	font-family: Lucida Sans Unicode;
+	font-size: 20px;
+	margin-left:160px;
+	margin-top:205px;
+	position:absolute;
+}
+#high
+{
+	color:white;
+	font-family: Lucida Sans Unicode;
+	font-size: 20px;
+	margin-left:100px;
+	margin-top:250px;
+	position:absolute;
+}
+#low
+{
+	color:white;
+	font-family: Lucida Sans Unicode;
+	font-size: 20px;
+	margin-left:180px;
+	margin-top:250px;
+	position:absolute;
+}
+#tempValue
+{
+	color:white;
+	font-family: Lucida Sans Unicode;
+	font-size: 100px;
+	margin-left:100px;
+	margin-top:280px;
+	position:absolute;
+}
+#degValue
+{
+	color:white;
+	font-family: Lucida Sans Unicode;
+	font-size: 80px;
+	margin-left:225px;
+	margin-top:280px;
+	position:absolute;
+}
+#tempUnit123
+{
+	color:white;
+	font-family: Lucida Sans Unicode;
+	font-size: 40px;
+	margin-left:247px;
+	margin-top:295px;
+	position:absolute;
+	text-decoration:underline;
+}
+a.tem
+{
+	color:white;
+	text-decoration:none;
+}
+#forecastText
+{
+	color:white;
+	font-family: Lucida Sans Unicode;
+	font-size: 20px;
+	margin-left:400px;
+	margin-top:210px;
+	position:absolute;
+}
+#forecastTable
+{
+	margin-left: 400px;
+	margin-top: 250px;
+	position:absolute;
+}
+.tableDay
+{
+	color:black;
+}
+.tableHigh
+{
+	color:#1E90FA;
+}
+.tableLow
+{
+	color:#FFA505;
+}
+#yahooIcon
+{
+	color:white;
+	margin-left: 1000px;
+	margin-top: 420px;
+	position:absolute;
+}
+#noInfo
+{
+	color: white;
+	margin-left: 150px;
+	margin-top: 80px;
+	position:absolute;
+}
+#facebook
+{
+	color: white;
+	margin-left: 800px;
+	margin-top: 270px;
+	position:absolute;
+}
+</style>
+<script type = "text/javascript" src="http://yui.yahooapis.com/3.13.0/build/yui/yui-min.js"></script>
+</HEAD>
+<body class="yui3-skin-sam" style="background-image:url('bg.jpg')">
+<div id="fb-root"></div>
+
+<script>
+window.fbAsyncInit = 
+function() 
+{
+	FB.init(
+	{
+		appId : '733861916642230',
+		channelUrl : 'http://cs-server.usc.edu:34448/examples/servlets/Weather.html', 
+		status     : true,
+		cookie	   : true,
+		xfbml      : true
+	});
+};
+
+(function(d)
+{
+	if (d.getElementById('facebook-jssdk')) 
+	{	
+		return;
+	}
+	
+	var id = 'facebook-jssdk';
+	var ref = d.getElementsByTagName('script')[0];
+
+	var js = d.createElement('script'); 
+	js.id = id;
+	js.async = true;
+	js.src = '//connect.facebook.net/en_US/all.js';
+	ref.parentNode.insertBefore(js, ref);
+}(document));
+   
+</script>
+
+<FORM ACTION="" METHOD = "POST" name = "WeatherForm" onsubmit = "return false">
+<div id="inputText">Location: &nbsp;&nbsp;<INPUT type = "text" name="location" placeholder = "Enter city of zip code" size="50">
+<INPUT type="submit" name="submit" value = "Search" onclick = "validate();"></div>
+<!--<INPUT type="hidden" name="unit" id ="unit" value="f">-->
+</FORM>
+<div id="cityName"></div>
+<div id="stateCountry"></div>
+<div id="imgLink"></div>
+<div id="weatherCond"></div>
+<div id="high"></div>
+<div id="low"></div>
+<div id="tempValue"></div>
+<div id="degValue"></div>
+<div id="tempUnit123"></div>
+<div id="forecastText"></div>
+<div id="forecastTable"></div>
+<div id="yahooIcon"></div>
+<div id="noInfo"></div>
+<div id="facebook"></div>
+<script type = "text/javascript">
+
+function refreshPage()
+{
+	document.getElementById("cityName").innerHTML = "";
+	document.getElementById("stateCountry").innerHTML = "";
+	document.getElementById("imgLink").innerHTML = "";
+	document.getElementById("weatherCond").innerHTML = "";
+	document.getElementById("high").innerHTML = "";
+	document.getElementById("low").innerHTML = "";
+	document.getElementById("tempValue").innerHTML = "";
+	document.getElementById("degValue").innerHTML = "";
+	document.getElementById("tempUnit123").innerHTML = "";
+	document.getElementById("forecastText").innerHTML = "";
+	document.getElementById("forecastTable").innerHTML = "";
+	document.getElementById("yahooIcon").innerHTML = "";
+	document.getElementById("noInfo").innerHTML = "";
+	document.getElementById("facebook").innerHTML = "";
+}
+
+function validate()
+{
+	temperatureUnitValue = 'f';
+	validateAndGetData();
+}
+
+function validateAndGetData()
+{ 
+	refreshPage();
+	type = "city";
+	loc = document.WeatherForm.location.value;
+	if(!isNaN(loc))
+	{
+		type = "zip";
+		var num = parseInt(loc);
+		if(loc.length !== 5)
+		{
+			alert("Invalid zipcode: must be five digits \n Example: 90089");
+			return;
+		}
+	}
+	else if(loc.indexOf(",") === -1)
+	{
+		alert("Invalid Location: Must include state or country sepertaed by comma \n Example: Los Angeles, CA");
+		return;
+	}
+	getData();
+}
+function getData()
+{
+	var url = "http://cs-server.usc.edu:34448/examples/servlet/weathersearch?location=";
+	
+	var unitString = "&unit=";
+	var typeString = "&type=";
+	var finalURL = url.concat(loc,typeString,type,unitString,temperatureUnitValue);
+	xmlHttp = null;
+	if(window.XMLHttpRequest)
+	{
+		xmlHttp = new XMLHttpRequest();
+	}
+	else if(window.ActiveXObject)
+	{
+		xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	if(xmlHttp)
+	{		
+		xmlHttp.open("GET", finalURL, true);
+		xmlHttp.onreadystatechange = readData;
+		xmlHttp.send();
+	}
+}
+function readData()
+{
+	console.log(xmlHttp.readyState);
+	console.log("\n" + xmlHttp.status);
+	if(xmlHttp.readyState === 4)
+	{	
+		if(xmlHttp.status === 200)
+		{
+			result = xmlHttp.responseText;
+			jsonObj = eval('('+result+')');
+			if(jsonObj.weather.hasValue == "true")
+			{
+				tempUnit = jsonObj.weather.units.temperature;
+				document.getElementById("cityName").innerHTML = "<a href=\"" + jsonObj.weather.feed.value + "\" class=\"rsslink\" target=\"_blank\">" + jsonObj.weather.location["city"];
+				document.getElementById("stateCountry").innerHTML = jsonObj.weather.location["region"].concat(",",jsonObj.weather.location["country"]);
+				document.getElementById("imgLink").innerHTML = "<img src=" + jsonObj.weather.img + " alt = \"\"></img>";
+				document.getElementById("weatherCond").innerHTML = jsonObj.weather.condition.text;
+				document.getElementById("high").innerHTML = "&uarr;" + jsonObj.weather.forecast[0].high + "&deg;" + tempUnit;
+				document.getElementById("low").innerHTML = "&darr;" + jsonObj.weather.forecast[0].low + "&deg;" + tempUnit;
+				document.getElementById("tempValue").innerHTML = jsonObj.weather.condition.temp;
+				document.getElementById("degValue").innerHTML = "&deg;";
+				document.getElementById("forecastText").innerHTML = "Forecast";
+				document.getElementById("noInfo").innerHTML = "";
+				
+				YUI().use("datatable", function (Y) 
+				{
+					tempTable = new Y.DataTable
+					({
+
+						columns:[
+									{"key":"Day" , "className":"tableDay"}, 
+									{"key":"Weather", "className":"tableDay"},
+									{"key":"High" , "className":"tableHigh"},
+									{"key":"Low" , "className":"tableLow"}
+								],
+
+						data   :[
+									{ Day: jsonObj.weather.forecast[0].day, Weather: jsonObj.weather.forecast[0].text, High: jsonObj.weather.forecast[0].high+"°"+tempUnit, Low:jsonObj.weather.forecast[0].high+"°"+tempUnit },
+									{ Day: jsonObj.weather.forecast[1].day, Weather: jsonObj.weather.forecast[1].text, High: jsonObj.weather.forecast[1].high+"°"+tempUnit, Low:jsonObj.weather.forecast[0].high+"°"+tempUnit },
+									{ Day: jsonObj.weather.forecast[2].day, Weather: jsonObj.weather.forecast[2].text, High: jsonObj.weather.forecast[2].high+"°"+tempUnit, Low:jsonObj.weather.forecast[0].high+"°"+tempUnit },
+									{ Day: jsonObj.weather.forecast[3].day, Weather: jsonObj.weather.forecast[3].text, High: jsonObj.weather.forecast[3].high+"°"+tempUnit, Low:jsonObj.weather.forecast[0].high+"°"+tempUnit },
+									{ Day: jsonObj.weather.forecast[4].day, Weather: jsonObj.weather.forecast[4].text, High: jsonObj.weather.forecast[4].high+"°"+tempUnit, Low:jsonObj.weather.forecast[0].high+"°"+tempUnit }
+								]
+					});
+				tempTable.render("#forecastTable");
+				});
+				
+				var postCur = "<input type=\"radio\" name=\"fbRadio\" id=\"postCurrent\" checked=\"checked\">Post Current Weather";
+				var postFore = "<br/><input type=\"radio\" name=\"fbRadio\" id=\"postForecast\">Post Weather Forecast<br/>";
+				var fbButton = "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick=\"postWeatherOnFB()\"><img src=\"http://www.ginahigbeegolf.com/sitebuildercontent/sitebuilderpictures/facebook-logo-small.jpg\" height = \"20\"></img></button>";
+				document.getElementById("facebook").innerHTML = postCur + postFore + fbButton;
+				
+				document.getElementById("yahooIcon").innerHTML = "<p>View Full Details on</p>" + "<a href=\"" + jsonObj.weather.link + "\" target=\"_blank\"><img src=\"http://l.yimg.com/a/i/brand/purplelogo/uh/us/news-wea.gif\" height=\"30\" width=\"150\"></img></a>";
+				document.getElementById("tempUnit123").innerHTML = "<a href=\"\" class=\"tem\" onclick=\"flipTemp();\">" + tempUnit + "</a>";
+			}
+			else
+			{
+				document.getElementById("noInfo").innerHTML = "<h1> Weather information cannot be found!</h1>";
+			}
+		}
+		else
+		{
+			document.getElementById("noInfo").innerHTML = "<h1> Weather information cannot be found!</h1>";
+		}
+	}
+	
+}
+
+function postWeatherOnFB()
+{
+	if(document.getElementById('postCurrent').checked) 
+	{
+		var currentWeatherObj = {
+			method: 'feed',
+			name: jsonObj.weather.location.city + ',' + jsonObj.weather.location.region + ',' + jsonObj.weather.location.country,
+			link: jsonObj.weather.feed.value,
+			picture: jsonObj.weather.img,
+			caption: 'The current condition for ' + jsonObj.weather.location.city + ' is ' + jsonObj.weather.condition.text,
+			description: 'Temperature is ' + jsonObj.weather.condition.temp + '&deg;' + jsonObj.weather.units.temperature,
+			properties : {"Look at details":{ "text":"here", "href": jsonObj.weather.link} }
+		};
+		
+		function currentWeatherObjCallBack(response) 
+		{
+			if (response && response.post_id) 
+			{
+				alert('Post was published.');
+			}
+			else 
+			{
+				alert('Post was not published.');
+			}
+		}
+		
+		FB.ui(currentWeatherObj, currentWeatherObjCallBack);
+	}
+	else if(document.getElementById('postForecast').checked) 
+	{
+		var currentForecastObj = {
+			method: 'feed',
+			name: jsonObj.weather.location.city + ',' + jsonObj.weather.location.region + ',' + jsonObj.weather.location.country,
+			link: jsonObj.weather.feed.value,
+			picture: 'http://www-scf.usc.edu/~csci571/2013Fall/hw8/weather.jpg', 
+			caption: 'Weather Forecast for ' + jsonObj.weather.location.city,
+			description: jsonObj.weather.forecast[0].day + ':' + jsonObj.weather.forecast[0].text + ',' + jsonObj.weather.forecast[0].high + '/' + jsonObj.weather.forecast[0].low + '&deg;' + jsonObj.weather.units.temperature + ';' + jsonObj.weather.forecast[1].day + ':' + jsonObj.weather.forecast[1].text + ',' + jsonObj.weather.forecast[1].high + '/' + jsonObj.weather.forecast[1].low + '&deg;' + jsonObj.weather.units.temperature + ';' + jsonObj.weather.forecast[2].day + ':' + jsonObj.weather.forecast[2].text + ',' + jsonObj.weather.forecast[2].high + '/' + jsonObj.weather.forecast[2].low + '&deg;' + jsonObj.weather.units.temperature + ';' + jsonObj.weather.forecast[3].day + ':' + jsonObj.weather.forecast[3].text + ',' + jsonObj.weather.forecast[3].high + '/' + jsonObj.weather.forecast[3].low + '&deg;' + jsonObj.weather.units.temperature + ';' + jsonObj.weather.forecast[4].day + ':' + jsonObj.weather.forecast[4].text + ',' + jsonObj.weather.forecast[4].high + '/' + jsonObj.weather.forecast[4].low + '&deg;' + jsonObj.weather.units.temperature + '.',
+			properties : {"Look at details": {"text":"here", "href":jsonObj.weather.link} }
+		};
+		
+		function currentForecastObjCallBack(response) 
+		{
+			if (response && response.post_id) 
+			{
+				alert('Post was published.');
+			}
+			else 
+			{
+				alert('Post was not published.');
+			}
+		}
+		FB.ui(currentForecastObj, currentForecastObjCallBack);
+	}
+}
+
+function flipTemp()
+{
+	if(temperatureUnitValue == 'f')
+		temperatureUnitValue = 'c';
+	else
+		temperatureUnitValue = 'f';
+	validateAndGetData();
+}
+</script>
+</body>
+</html>

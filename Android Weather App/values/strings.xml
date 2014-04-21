@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WeatherApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="Location">Zip or Location</string>
+    <string name="Search">Search</string>
+	<string name="c">&#xb0;C</string>
+	<string name="f">&#xb0;F</string>
+	<string name="City"></string>
+	<string name="Image"></string>
+	<string name="loc_info"></string>
+	<string name="condition"></string>
+	<string name="temperature"></string>
+	<string name="forecastText"></string>
+	<string name="day">Day</string>
+	<string name="weather">Weather</string>
+	<string name="high">High</string>
+	<string name="low">Low</string>
+	<string name="shareWeather">Share Current Weather</string>
+	<string name="shareForecast">Share Weather Forecast</string>
+	<string name="app_id">179434522255752</string>
+	<string name="instructions">Login to create a link to fetch account data</string>
+	<string name="login">Login</string>
+	<string name="logout">Log out</string>
+	<string name="fb">Facebook</string> 
+</resources>
